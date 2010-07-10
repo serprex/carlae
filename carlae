@@ -1,7 +1,5 @@
 #!/usr/bin/python
 from sys import argv
-import zlib
-import bz2
 def f1(x):
 	q="'" if x.count("'")<x.count('"') else '"'
 	F={"\0":"0","\r":"r","\n":"n",q:q}
