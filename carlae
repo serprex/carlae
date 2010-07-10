@@ -1,0 +1,24 @@
+#!/usr/bin/python
+from sys import argv
+import zlib
+import bz2
+def f1(x):
+	q="'" if x.count("'")<x.count('"') else '"'
+	F={"\0":"0","\r":"r","\n":"n",q:q}
+	a=x.find("\\")
+	while a!=-1:
+		if a+1==len(x) or x[a+1] in "01234567xvtrnfba\\" or x[a+1] in F:x=x[:a]+"\\"+x[a:]
+		a=x.find("\\",a+2)
+	return q+"".join(x if x not in F else "\\"+F[x] for x in x)+q
+def f(x):
+	print len(x),
+	x=f1(x)
+	print len(x)
+	return x
+if len(argv)==3:
+	a=min(("""#!/usr/bin/python
+#coding=utf-8
+import %s
+exec %s.decompress(%s)"""%(a,a,f(__import__(a).compress(open(argv[1]).read().strip(),9))) for a in("zlib","bz2")),key=len)
+	open(argv[2],"wb").write(a)
+else:print "carlae src dst"
