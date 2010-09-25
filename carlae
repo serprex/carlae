@@ -1,5 +1,6 @@
 #!/usr/bin/python
-from sys import argv
+from __future__ import print_function
+from sys import argv,version_info
 def f1(x):
 	q="'" if x.count("'")<x.count('"') else '"'
 	F={"\0":"0","\r":"r","\n":"n",q:q}
@@ -9,14 +10,18 @@ def f1(x):
 		a=x.find("\\",a+2)
 	return q+"".join(x if x not in F else "\\"+F[x] for x in x)+q
 def f(x):
-	print len(x),
+	print(len(x),end=" ")
 	x=f1(x)
-	print len(x)
+	print(len(x))
 	return x
-if len(argv)==3:
-	a=min(("""#!/usr/bin/python
-#coding=utf-8
+if len(argv)>2:
+	V30,V31="()" if "2" not in argv[3:] and ("3" in argv[3:] or version_info[0]>2) else (" ","")
+	PYTH="#!/usr/bin/python\n"
+	for a in argv[3:]:
+		if a=="/":PYTH=""
+		elif a and a[0]=="/":PYTH="#!"+a
+	a=min(("""%s#coding=utf-8
 import %s
-exec %s.decompress(%s)"""%(a,a,f(__import__(a).compress(open(argv[1]).read().strip(),9))) for a in("zlib","bz2")),key=len)
+exec%s%s.decompress(%s)%s"""%(PYTH,a,V30,a,f(__import__(a).compress(open(argv[1]).read().strip(),9)),V31) for a in("zlib","bz2")),key=len)
 	open(argv[2],"wb").write(a)
-else:print "carlae src dst"
+else:print("carlae src dst\nAppend a 2 or 3 to override auto versioning\nAppend a path to override shebang")
