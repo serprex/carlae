@@ -1,27 +1,22 @@
 #!/usr/bin/python
 from __future__ import print_function
-from sys import argv,version_info
-def f1(x):
-	q="'" if x.count("'")<x.count('"') else '"'
-	F={"\0":"0","\r":"r","\n":"n",q:q}
-	a=x.find("\\")
-	while a!=-1:
-		if a+1==len(x) or x[a+1] in "01234567xvtrnfba\\" or x[a+1] in F:x=x[:a]+"\\"+x[a:]
-		a=x.find("\\",a+2)
-	return q+"".join(x if x not in F else "\\"+F[x] for x in x)+q
+from sys import argv as A,version_info as V
 def f(x):
 	print(len(x),end=" ")
-	x=f1(x)
+	q=b"'"if x.count(b"'")<x.count(b'"')else b'"'
+	F={b"\0":b"0",b"\r":b"r",b"\n":b"n",q:q}
+	a=x.find(b"\\")
+	while a!=-1:
+		if a+1==len(x)or x[a+1]in b"01234567xvtrnfba\\"or x[a+1]in F:x=x[:a]+b"\\"+x[a:]
+		a=x.find(b"\\",a+2)
+	x=q+b"".join(b"\\"+F[x]if x in F else x for x in x)+q
 	print(len(x))
 	return x
-if len(argv)>2:
-	V30,V31="()" if "2" not in argv[3:] and ("3" in argv[3:] or version_info[0]>2) else (" ","")
-	PYTH="#!/usr/bin/python\n"
-	for a in argv[3:]:
-		if a=="/":PYTH=""
-		elif a and a[0]=="/":PYTH="#!"+a
-	a=min(("""%s#coding=utf-8
-import %s
-exec%s%s.decompress(%s)%s"""%(PYTH,a,V30,a,f(__import__(a).compress(open(argv[1]).read().strip(),9)),V31) for a in("zlib","bz2")),key=len)
-	open(argv[2],"wb").write(a)
-else:print("carlae src dst\nAppend a 2 or 3 to override auto versioning\nAppend a path to override shebang")
+if len(A)>2:
+	o,c=b"()"if"2"not in A[3:]and("3"in A[3:]or V[0]>2)else(b" ",b"")
+	p=b"#!/usr/bin/python\n"
+	for a in A[3:]:
+		if a in"/":p=b""
+		elif a[0]=="/":p=b"#!"+bytes(a)
+	open(A[2],"wb").write(min((b"%s#coding=utf-8\nimport %s\nexec%s%s.decompress(%s)%s"%(p,a,o,a,f(__import__(a).compress(open(A[1]).read().strip(),9)),c)for a in(b"zlib",b"bz2")),key=len))
+else:print("carlae src dst\nAppend 2/3 to override auto versioning\nAppend path to override shebang")
