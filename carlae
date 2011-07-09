@@ -17,6 +17,6 @@ try:
 	p=b"#!/usr/bin/python\n"
 	for a in A[3:]:
 		if a in"/":p=b""
-		elif a[0]=="/":p=b"#!"+bytes(a)+"\n"
+		elif a[0]=="/":p=b"#!"+bytes(a)+b"\n"
 	open(A[2],"wb").write(min((b"%simport %s\nexec%s%s.decompress(%s)%s"%(p if c else p+"#coding=utf-8\n",a,o,a,f(__import__(a).compress(open(A[1]).read().strip(),9)),c)for a in(b"zlib",b"bz2")),key=len))
 except:print("carlae src dst\nAppend 2/3 to override auto versioning\nAppend path to override shebang")
