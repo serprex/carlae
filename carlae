@@ -1,6 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from __future__ import print_function
 from sys import argv as A,version_info as V
+from os.path import getsize
 def f(x):
 	print(len(x),end=" ")
 	q=b"'"if x.count(b"'")<x.count(b'"')else b'"'
@@ -13,11 +14,11 @@ def f(x):
 	print(len(q))
 	return q
 try:
-	o,c=b"()"if"2"not in A[3:]and("3"in A[3:]or V[0]>2)else(b" ",b"")
+	o,c="()"if"2"not in A[3:]and("3"in A[3:]or V[0]>2)else(" ","")
 	p=b"#!/usr/bin/python\n"
 	for a in A[3:]:
-		if a in"/":p=b""
-		elif a[0]=="/":p=b"#!"+bytes(a)+b"\n"
+		if a in"/":p=""
+		elif a[0]=="/":p="#!"+a+"\n"
 	open(A[2],"wb").write(min(("%sexec%s%s.decode('%s')%s"%(p+("#coding=latin\n"*("#"not in A[3:])),o,f(__import__(a).compress(open(A[1]).read().strip(),9)),b,c)for a,b in(("zlib","zip"),("bz2","bz2"))),key=len))
-	print(len(open(A[2],"rb").read()))
+	print(getsize(A[1]),getsize(A[2]))
 except:print("carlae src dst\nAppend 2/3 to override auto versioning\nAppend path to override shebang")
